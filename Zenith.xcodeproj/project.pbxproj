@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		504CD71D2F2FA0DC00C682C2 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 504CD7002F2FA03A00C682C2 /* WidgetKit.framework */; };
+		504CD71E2F2FA0DC00C682C2 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 504CD7022F2FA03A00C682C2 /* SwiftUI.framework */; };
+		504CD72B2F2FA0DD00C682C2 /* ZenithWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 504CD71C2F2FA0DC00C682C2 /* ZenithWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		5024E12D2F1FA64900564D5E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -21,17 +27,62 @@
 			remoteGlobalIDString = 5024E11C2F1FA64800564D5E;
 			remoteInfo = calculateAI;
 		};
+		504CD7292F2FA0DD00C682C2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5024E1152F1FA64800564D5E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 504CD71B2F2FA0DC00C682C2;
+			remoteInfo = ZenithWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		504CD7172F2FA03C00C682C2 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				504CD72B2F2FA0DD00C682C2 /* ZenithWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		5024E11D2F1FA64800564D5E /* calculateAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = calculateAI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5024E12C2F1FA64900564D5E /* calculateAITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = calculateAITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5024E1362F1FA64900564D5E /* calculateAIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = calculateAIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		504CD7002F2FA03A00C682C2 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		504CD7022F2FA03A00C682C2 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		504CD71C2F2FA0DC00C682C2 /* ZenithWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ZenithWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		506D5C5D2F2FA91300965220 /* ZenithWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ZenithWidgetExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5018F34D2F2FA4AE00BA63F3 /* Exceptions for "ZenithWidget" folder in "ZenithWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 504CD71B2F2FA0DC00C682C2 /* ZenithWidgetExtension */;
+		};
+		504CD7302F2FA36300C682C2 /* Exceptions for "calculateAI" folder in "calculateAI" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 5024E11C2F1FA64800564D5E /* calculateAI */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5024E11F2F1FA64800564D5E /* calculateAI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				504CD7302F2FA36300C682C2 /* Exceptions for "calculateAI" folder in "calculateAI" target */,
+			);
 			path = calculateAI;
 			sourceTree = "<group>";
 		};
@@ -43,6 +94,14 @@
 		5024E1392F1FA64900564D5E /* calculateAIUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = calculateAIUITests;
+			sourceTree = "<group>";
+		};
+		504CD71F2F2FA0DC00C682C2 /* ZenithWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5018F34D2F2FA4AE00BA63F3 /* Exceptions for "ZenithWidget" folder in "ZenithWidgetExtension" target */,
+			);
+			path = ZenithWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -69,15 +128,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		504CD7192F2FA0DC00C682C2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				504CD71E2F2FA0DC00C682C2 /* SwiftUI.framework in Frameworks */,
+				504CD71D2F2FA0DC00C682C2 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		5024E1142F1FA64800564D5E = {
 			isa = PBXGroup;
 			children = (
+				506D5C5D2F2FA91300965220 /* ZenithWidgetExtension.entitlements */,
 				5024E11F2F1FA64800564D5E /* calculateAI */,
 				5024E12F2F1FA64900564D5E /* calculateAITests */,
 				5024E1392F1FA64900564D5E /* calculateAIUITests */,
+				504CD71F2F2FA0DC00C682C2 /* ZenithWidget */,
+				504CD6FF2F2FA03A00C682C2 /* Frameworks */,
 				5024E11E2F1FA64800564D5E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -88,8 +159,18 @@
 				5024E11D2F1FA64800564D5E /* calculateAI.app */,
 				5024E12C2F1FA64900564D5E /* calculateAITests.xctest */,
 				5024E1362F1FA64900564D5E /* calculateAIUITests.xctest */,
+				504CD71C2F2FA0DC00C682C2 /* ZenithWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		504CD6FF2F2FA03A00C682C2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				504CD7002F2FA03A00C682C2 /* WidgetKit.framework */,
+				504CD7022F2FA03A00C682C2 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -102,10 +183,12 @@
 				5024E1192F1FA64800564D5E /* Sources */,
 				5024E11A2F1FA64800564D5E /* Frameworks */,
 				5024E11B2F1FA64800564D5E /* Resources */,
+				504CD7172F2FA03C00C682C2 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				504CD72A2F2FA0DD00C682C2 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				5024E11F2F1FA64800564D5E /* calculateAI */,
@@ -163,6 +246,28 @@
 			productReference = 5024E1362F1FA64900564D5E /* calculateAIUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		504CD71B2F2FA0DC00C682C2 /* ZenithWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 504CD72D2F2FA0DD00C682C2 /* Build configuration list for PBXNativeTarget "ZenithWidgetExtension" */;
+			buildPhases = (
+				504CD7182F2FA0DC00C682C2 /* Sources */,
+				504CD7192F2FA0DC00C682C2 /* Frameworks */,
+				504CD71A2F2FA0DC00C682C2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				504CD71F2F2FA0DC00C682C2 /* ZenithWidget */,
+			);
+			name = ZenithWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = ZenithWidgetExtension;
+			productReference = 504CD71C2F2FA0DC00C682C2 /* ZenithWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -184,6 +289,9 @@
 						CreatedOnToolsVersion = 26.2;
 						TestTargetID = 5024E11C2F1FA64800564D5E;
 					};
+					504CD71B2F2FA0DC00C682C2 = {
+						CreatedOnToolsVersion = 26.2;
+					};
 				};
 			};
 			buildConfigurationList = 5024E1182F1FA64800564D5E /* Build configuration list for PBXProject "calculateAI" */;
@@ -203,6 +311,7 @@
 				5024E11C2F1FA64800564D5E /* calculateAI */,
 				5024E12B2F1FA64900564D5E /* calculateAITests */,
 				5024E1352F1FA64900564D5E /* calculateAIUITests */,
+				504CD71B2F2FA0DC00C682C2 /* ZenithWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -223,6 +332,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		5024E1342F1FA64900564D5E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		504CD71A2F2FA0DC00C682C2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -253,6 +369,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		504CD7182F2FA0DC00C682C2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -265,6 +388,11 @@
 			isa = PBXTargetDependency;
 			target = 5024E11C2F1FA64800564D5E /* calculateAI */;
 			targetProxy = 5024E1372F1FA64900564D5E /* PBXContainerItemProxy */;
+		};
+		504CD72A2F2FA0DD00C682C2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 504CD71B2F2FA0DC00C682C2 /* ZenithWidgetExtension */;
+			targetProxy = 504CD7292F2FA0DD00C682C2 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -395,6 +523,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = calculateAI/calculateAI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FVGT53TKRS;
@@ -427,6 +556,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = calculateAI/calculateAI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FVGT53TKRS;
@@ -538,6 +668,68 @@
 			};
 			name = Release;
 		};
+		504CD72E2F2FA0DD00C682C2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = ZenithWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FVGT53TKRS;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ZenithWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ZenithWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.voicebrain.calculateAI.ZenithWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		504CD72F2F2FA0DD00C682C2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = ZenithWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FVGT53TKRS;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ZenithWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ZenithWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.voicebrain.calculateAI.ZenithWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -573,6 +765,15 @@
 			buildConfigurations = (
 				5024E1472F1FA64900564D5E /* Debug */,
 				5024E1482F1FA64900564D5E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		504CD72D2F2FA0DD00C682C2 /* Build configuration list for PBXNativeTarget "ZenithWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				504CD72E2F2FA0DD00C682C2 /* Debug */,
+				504CD72F2F2FA0DD00C682C2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

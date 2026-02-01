@@ -1,0 +1,87 @@
+{
+  "identifier" : "com.zenith.products",
+  "nonRenewingSubscriptions" : [],
+  "products" : [],
+  "settings" : {
+    "_applicationInternalID" : "1234567890",
+    "_developerTeamID" : "TEAM_ID",
+    "_lastSynchronizedDate" : "2026-02-01T14:00:00Z"
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "zenith_premium",
+      "localizations" : [
+        {
+          "description" : "Unlock all Zenith Finance premium features",
+          "displayName" : "Zenith Premium",
+          "locale" : "en_US"
+        }
+      ],
+      "name" : "Zenith Premium",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "4.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "monthly_001",
+          "introductoryOffer" : {
+            "displayPrice" : "0.99",
+            "internalID" : "intro_monthly",
+            "paymentMode" : "payUpFront",
+            "subscriptionPeriod" : {
+              "numberOfUnits" : 1,
+              "unit" : "week"
+            }
+          },
+          "localizations" : [
+            {
+              "description" : "Full access to AI insights, unlimited exports, and all premium features billing monthly",
+              "displayName" : "Monthly Premium",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.zenith.premium.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Monthly Premium",
+          "subscriptionGroupID" : "zenith_premium",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "49.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "yearly_001",
+          "introductoryOffer" : {
+            "displayPrice" : "29.99",
+            "internalID" : "intro_yearly",
+            "paymentMode" : "payUpFront",
+            "subscriptionPeriod" : {
+              "numberOfUnits" : 1,
+              "unit" : "month"
+            }
+          },
+          "localizations" : [
+            {
+              "description" : "Full access to AI insights, unlimited exports, and all premium features. Save 17% with yearly billing!",
+              "displayName" : "Yearly Premium",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.zenith.premium.yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Yearly Premium",
+          "subscriptionGroupID" : "zenith_premium",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}
