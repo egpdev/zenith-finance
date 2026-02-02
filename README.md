@@ -57,9 +57,15 @@ Das Projekt basiert auf modernsten Apple-Technologien und folgt der MVVM-Archite
 
 ## 📱 Screenshots
 
-| Dashboard | KI Insights | Voice Input | Scanner |
+### Core Experience
+| Dashboard | Transactions | Planner | Scanner |
 |:---:|:---:|:---:|:---:|
-| ![Dashboard](screenshots/dashboard.png) | ![Insights](screenshots/ai.png) | ![Voice](screenshots/voice.png) | ![Scanner](screenshots/scanner.png) |
+| ![Dashboard](screenshots/dashboard.png) | ![Transactions](screenshots/transactions.png) | ![Planner](screenshots/planner.png) | ![Scanner](screenshots/scanner.png) |
+
+### Smart Features
+| AI Insights | Voice Input | Premium | Widgets |
+|:---:|:---:|:---:|:---:|
+| ![AI Insights](screenshots/ai_insights.png) | ![Voice](screenshots/voice.png) | ![Premium](screenshots/premium.png) | ![Widgets](screenshots/widget.png) |
 
 ---
 *Entwickelt mit ❤️ von Pylkov Egor*
