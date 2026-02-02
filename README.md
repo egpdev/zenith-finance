@@ -1,6 +1,6 @@
 # Zenith Finance 🚀
 
-![Banner Placeholder](https://via.placeholder.com/1200x400?text=Zenith+Finance+App+Banner)
+![Zenith Finance](screenshots/banner.png)
 
 ## 📌 Kurzbeschreibung
 **Zenith Finance** ist eine fortschrittliche iOS-Finanzplaner-App, die entwickelt wurde, um Nutzern durch KI-gestützte Analysen die volle Kontrolle über ihre persönlichen Finanzen zu geben. Die App vereint ein futuristisches, benutzerfreundliches Design mit leistungsstarken Funktionen wie intelligenter Sprachsteuerung, automatischem Beleg-Scanning und nahtloser iCloud-Synchronisierung. Zenith Finance transformiert das traditionelle Ausgabenmanagement in ein proaktives, datengesteuertes Erlebnis.
