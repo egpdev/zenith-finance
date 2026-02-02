@@ -18,17 +18,7 @@ struct ZenithSubscriptionView: View {
 
     var body: some View {
         ZStack {
-            Color.zenithBlack.ignoresSafeArea()
-
-            // Background ambient glow
-            VStack {
-                Ellipse()
-                    .fill(Color.mintGreen.opacity(0.1))
-                    .frame(width: 300, height: 300)
-                    .blur(radius: 60)
-                Spacer()
-            }
-            .offset(y: -100)
+            ZenithBackground()
 
             VStack(spacing: 0) {
                 // Header with Close button
@@ -110,7 +100,11 @@ struct ZenithSubscriptionView: View {
                         .padding()
                         .background(
                             RoundedRectangle(cornerRadius: 24)
-                                .fill(Color.white.opacity(0.05))
+                                .fill(.ultraThinMaterial)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 24)
+                                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                                )
                         )
                         .padding(.horizontal)
 
@@ -366,10 +360,12 @@ struct DynamicPricingCard: View {
             .padding(.vertical, 20)
             .background(
                 RoundedRectangle(cornerRadius: 20)
-                    .fill(Color.white.opacity(0.05))
+                    .fill(.ultraThinMaterial)
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
-                            .stroke(isSelected ? Color.mintGreen : Color.clear, lineWidth: 2)
+                            .stroke(
+                                isSelected ? Color.mintGreen : Color.white.opacity(0.1),
+                                lineWidth: 2)
                     )
             )
         }
@@ -433,10 +429,12 @@ struct StaticPricingCard: View {
             .padding(.vertical, 20)
             .background(
                 RoundedRectangle(cornerRadius: 20)
-                    .fill(Color.white.opacity(0.05))
+                    .fill(.ultraThinMaterial)
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
-                            .stroke(isSelected ? Color.mintGreen : Color.clear, lineWidth: 2)
+                            .stroke(
+                                isSelected ? Color.mintGreen : Color.white.opacity(0.1),
+                                lineWidth: 2)
                     )
             )
         }

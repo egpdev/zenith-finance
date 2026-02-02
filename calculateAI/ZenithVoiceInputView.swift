@@ -5,9 +5,11 @@
 //  Voice Input with Speech Recognition
 //
 
+import AVFoundation
 import Speech
 import SwiftData
 import SwiftUI
+import UIKit  // Required for UIBezierPath
 
 struct ZenithVoiceInputView: View {
     @Binding var isPresented: Bool
@@ -130,14 +132,21 @@ struct ZenithVoiceInputView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .background(
-                    Color.zenithBlack.opacity(0.9)
-                        .background(.ultraThinMaterial)
-                        .cornerRadius(24, corners: [.topLeft, .topRight])
+                    ZStack {
+                        ZenithBackground()
+                        Color.black.opacity(0.2)  // Slight dim
+                    }
+                    .mask(
+                        RoundedCorner(radius: 24, corners: [.topLeft, .topRight])
+                    )
                 )
                 .transition(.move(edge: .bottom))
                 .onAppear {
                     isAnimating = true
-                    requestSpeechAuthorization()
+                    // Small delay to allow transition to complete before accessing hardware
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        requestSpeechAuthorization()
+                    }
                 }
                 .onDisappear {
                     stopListening()
@@ -179,15 +188,22 @@ struct ZenithVoiceInputView: View {
     }
 
     private func startListening() {
+        // Ensure we don't double-start
+        if recognitionTask != nil {
+            recognitionTask?.cancel()
+            recognitionTask = nil
+        }
+
         guard let recognizer = speechRecognizer, recognizer.isAvailable else {
             errorMessage = "Speech recognition not available."
             return
         }
 
         do {
-            // Configure audio session
+            // Configure audio session - playAndRecord is often safer to prevent routing crashes
             let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
+            try audioSession.setCategory(
+                .playAndRecord, mode: .measurement, options: [.duckOthers, .defaultToSpeaker])
             try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
 
             recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
@@ -195,31 +211,52 @@ struct ZenithVoiceInputView: View {
 
             recognitionRequest.shouldReportPartialResults = true
 
+            // Force engine reset
+            if audioEngine.isRunning {
+                audioEngine.stop()
+                audioEngine.inputNode.removeTap(onBus: 0)
+            }
+
             let inputNode = audioEngine.inputNode
+
+            // CRITICAL FIX: Remove generic tap if correctly installed to prevent crash
+            inputNode.removeTap(onBus: 0)
 
             recognitionTask = recognizer.recognitionTask(with: recognitionRequest) {
                 result, error in
-                if let result = result {
-                    transcribedText = result.bestTranscription.formattedString
+                // Ensure UI updates happen on main thread to prevent crashes
+                DispatchQueue.main.async {
+                    if let result = result {
+                        self.transcribedText = result.bestTranscription.formattedString
 
-                    // Try to parse after each result
-                    if result.isFinal {
-                        parseTranscription(transcribedText)
-                        stopListening()
+                        // Try to parse after each result
+                        if result.isFinal {
+                            self.parseTranscription(self.transcribedText)
+                            self.stopListening()
+                        }
                     }
-                }
 
-                if let error = error {
-                    print("Speech recognition error: \(error)")
-                    // Don't show user errors for common cancellation
-                    if (error as NSError).code != 1 && (error as NSError).code != 216 {
-                        errorMessage = "Could not recognize speech."
+                    if let error = error {
+                        print("Speech recognition error: \(error)")
+                        // Don't show user errors for common cancellation
+                        if (error as NSError).code != 1 && (error as NSError).code != 216 {
+                            self.errorMessage = "Could not recognize speech."
+                        }
+                        self.stopListening()
                     }
-                    stopListening()
                 }
             }
 
             let recordingFormat = inputNode.outputFormat(forBus: 0)
+
+            // SAFETY CHECK: Ensure valid sample rate to prevent Simulator crash
+            if recordingFormat.sampleRate == 0 {
+                // Try standard format or fallback
+                print("Invalid sample rate (0), skipping tap installation to prevent crash")
+                errorMessage = "Audio input unavailable (Simulator)"
+                return
+            }
+
             inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
                 recognitionRequest.append(buffer)
             }

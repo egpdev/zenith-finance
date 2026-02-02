@@ -294,7 +294,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 5024E1182F1FA64800564D5E /* Build configuration list for PBXProject "calculateAI" */;
+			buildConfigurationList = 5024E1182F1FA64800564D5E /* Build configuration list for PBXProject "Zenith" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -733,7 +733,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		5024E1182F1FA64800564D5E /* Build configuration list for PBXProject "calculateAI" */ = {
+		5024E1182F1FA64800564D5E /* Build configuration list for PBXProject "Zenith" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5024E13E2F1FA64900564D5E /* Debug */,

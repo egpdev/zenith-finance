@@ -9,6 +9,7 @@ import AVFoundation
 import PhotosUI
 import SwiftData
 import SwiftUI
+import UIKit
 import Vision
 
 struct ZenithScannerView: View {
@@ -26,7 +27,7 @@ struct ZenithScannerView: View {
 
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
+            ZenithBackground()
 
             // Mock Camera Feed
             Image(systemName: "camera.metering.center.weighted")
@@ -46,7 +47,12 @@ struct ZenithScannerView: View {
                             .font(.title2)
                             .foregroundColor(.white)
                             .padding()
-                            .background(Circle().fill(Color.black.opacity(0.6)))
+                            .background(
+                                Circle()
+                                    .fill(.ultraThinMaterial)
+                                    .overlay(
+                                        Circle().stroke(Color.white.opacity(0.1), lineWidth: 1))
+                            )
                     }
                     Spacer()
 
@@ -56,7 +62,12 @@ struct ZenithScannerView: View {
                             .font(.title2)
                             .foregroundColor(.white)
                             .padding()
-                            .background(Circle().fill(Color.black.opacity(0.6)))
+                            .background(
+                                Circle()
+                                    .fill(.ultraThinMaterial)
+                                    .overlay(
+                                        Circle().stroke(Color.white.opacity(0.1), lineWidth: 1))
+                            )
                     }
                 }
                 .padding()
@@ -540,7 +551,12 @@ struct ScanResultView: View {
         .padding(24)
         .background(
             RoundedRectangle(cornerRadius: 24)
-                .fill(Color.zenithCharcoal)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 24)
+                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                )
+                .shadow(color: .black.opacity(0.2), radius: 10)
         )
         .padding(40)
     }

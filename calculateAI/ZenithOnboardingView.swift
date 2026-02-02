@@ -27,14 +27,7 @@ struct ZenithOnboardingView: View {
 
     var body: some View {
         ZStack {
-            Color.zenithBlack.ignoresSafeArea()
-
-            // Background ambient glow
-            Circle()
-                .fill(Color.neonTurquoise.opacity(0.1))
-                .frame(width: 300, height: 300)
-                .blur(radius: 60)
-                .offset(y: -200)
+            ZenithBackground()
 
             VStack {
                 Spacer()
@@ -46,20 +39,18 @@ struct ZenithOnboardingView: View {
                             // Icon
                             ZStack {
                                 Circle()
-                                    .fill(
-                                        LinearGradient(
-                                            colors: [
-                                                Color.neonTurquoise.opacity(0.2),
-                                                Color.mintGreen.opacity(0.1),
-                                            ],
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        )
-                                    )
+                                    .fill(.ultraThinMaterial)
                                     .frame(width: 160, height: 160)
                                     .overlay(
                                         Circle()
-                                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                                            .stroke(
+                                                LinearGradient(
+                                                    colors: [.white.opacity(0.2), .clear],
+                                                    startPoint: .topLeading,
+                                                    endPoint: .bottomTrailing
+                                                ),
+                                                lineWidth: 1
+                                            )
                                     )
 
                                 Image(systemName: pages[index].image)

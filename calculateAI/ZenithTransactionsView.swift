@@ -39,7 +39,7 @@ struct ZenithTransactionsView: View {
 
     var body: some View {
         ZStack {
-            Color.zenithBlack.ignoresSafeArea()
+            ZenithBackground()
 
             VStack(spacing: 0) {
                 // Header
@@ -91,12 +91,17 @@ struct ZenithTransactionsView: View {
                     .padding(.horizontal)
                     .padding(.top)
 
-                    // Title & Filter
                     HStack {
                         Text("Recent Activity")
                             .font(.largeTitle)
                             .fontWeight(.bold)
-                            .foregroundColor(.white)
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [.white, Color.neonTurquoise.opacity(0.8)],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
                         Spacer()
 
                         Menu {
@@ -141,8 +146,14 @@ struct ZenithTransactionsView: View {
                             }
                         }
                         .padding()
-                        .background(Color(white: 1.0, opacity: 0.05))
-                        .cornerRadius(12)
+                        .background(
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(.ultraThinMaterial)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .stroke(Color.white.opacity(0.15), lineWidth: 1)
+                                )
+                        )
                         .padding(.horizontal)
                         .transition(.move(edge: .top).combined(with: .opacity))
                     }
@@ -271,30 +282,68 @@ struct TransactionRow: View {
 struct AddTransactionView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.presentationMode) var presentationMode
+    @Query(sort: \CategoryModel.orderIndex) private var userCategories: [CategoryModel]
 
     @State private var merchant = ""
     @State private var amountString = ""
     @State private var type: TransactionType = .expense
     @State private var category: TransactionCategory = .other
+    @State private var selectedUserCategoryID: String? = nil
+    @State private var useCustomCategory = false
 
     var body: some View {
         ZStack {
-            Color.zenithBlack.ignoresSafeArea()
+            ZenithBackground()
 
             VStack(spacing: 24) {
-                Text("New ZenithTransaction")
+                Text("New Transaction")
                     .font(.title2)
                     .fontWeight(.bold)
-                    .foregroundColor(.white)
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.white, Color.neonTurquoise],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
                     .padding(.top)
 
                 VStack(spacing: 16) {
-                    TextField("Merchant (e.g. Starbucks)", text: $merchant)
+                    // Merchant (only show if no category selected OR type is income)
+                    if !useCustomCategory || type == .income {
+                        TextField("Merchant (e.g. Starbucks)", text: $merchant)
+                            .padding()
+                            .background(Color.white.opacity(0.1))
+                            .cornerRadius(12)
+                            .foregroundColor(.white)
+                    } else {
+                        // Show selected category name
+                        HStack {
+                            if let selectedCat = userCategories.first(where: {
+                                $0.id == selectedUserCategoryID
+                            }) {
+                                Image(systemName: selectedCat.icon)
+                                    .foregroundColor(.mintGreen)
+                                Text(selectedCat.name)
+                                    .foregroundColor(.white)
+                                    .fontWeight(.medium)
+                                Spacer()
+                                Button(action: {
+                                    useCustomCategory = false
+                                    selectedUserCategoryID = nil
+                                    merchant = ""
+                                }) {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundColor(.gray)
+                                }
+                            }
+                        }
                         .padding()
-                        .background(Color.white.opacity(0.1))
+                        .background(Color.mintGreen.opacity(0.1))
                         .cornerRadius(12)
-                        .foregroundColor(.white)
+                    }
 
+                    // Amount
                     TextField("Amount (e.g. 15.50)", text: $amountString)
                         .keyboardType(.decimalPad)
                         .padding()
@@ -302,34 +351,96 @@ struct AddTransactionView: View {
                         .cornerRadius(12)
                         .foregroundColor(.white)
 
+                    // Type Picker
                     Picker("Type", selection: $type) {
                         Text("Expense").tag(TransactionType.expense)
                         Text("Income").tag(TransactionType.income)
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .colorMultiply(.mintGreen)
+                    .onChange(of: type) { _, newValue in
+                        // Clear selected category when switching to Income
+                        if newValue == .income {
+                            useCustomCategory = false
+                            selectedUserCategoryID = nil
+                        }
+                    }
 
-                    HStack {
-                        Text("Category")
-                            .foregroundColor(.gray)
-                        Spacer()
-                        Picker("Category", selection: $category) {
-                            ForEach(TransactionCategory.allCases) { cat in
-                                Label(cat.rawValue, systemImage: cat.icon).tag(cat)
+                    // Category Section (only for Expense)
+                    if type == .expense {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("SELECT CATEGORY")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.gray)
+
+                            // Quick select from user categories
+                            if !userCategories.isEmpty {
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 12) {
+                                        ForEach(userCategories.filter { !$0.isHidden }) { cat in
+                                            Button(action: {
+                                                selectedUserCategoryID = cat.id
+                                                useCustomCategory = true
+                                                merchant = cat.name  // Auto-fill merchant
+                                                category =
+                                                    TransactionCategory(rawValue: cat.id) ?? .other
+                                            }) {
+                                                VStack(spacing: 6) {
+                                                    ZStack {
+                                                        Circle()
+                                                            .fill(
+                                                                selectedUserCategoryID == cat.id
+                                                                    ? Color.mintGreen
+                                                                    : Color.white.opacity(0.1)
+                                                            )
+                                                            .frame(width: 50, height: 50)
+                                                        Image(systemName: cat.icon)
+                                                            .font(.title3)
+                                                            .foregroundColor(
+                                                                selectedUserCategoryID == cat.id
+                                                                    ? .black : .white)
+                                                    }
+                                                    Text(cat.name)
+                                                        .font(.caption2)
+                                                        .foregroundColor(
+                                                            selectedUserCategoryID == cat.id
+                                                                ? .mintGreen : .gray
+                                                        )
+                                                        .lineLimit(1)
+                                                }
+                                            }
+                                            .buttonStyle(PlainButtonStyle())
+                                        }
+                                    }
+                                }
+                            } else {
+                                // Only show built-in if no user categories
+                                HStack {
+                                    Text("Category:")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                    Spacer()
+                                    Picker("Category", selection: $category) {
+                                        ForEach(TransactionCategory.allCases) { cat in
+                                            Label(cat.rawValue, systemImage: cat.icon).tag(cat)
+                                        }
+                                    }
+                                    .tint(.mintGreen)
+                                }
+                                .padding()
+                                .background(Color.white.opacity(0.1))
+                                .cornerRadius(12)
                             }
                         }
-                        .tint(.mintGreen)
                     }
-                    .padding()
-                    .background(Color.white.opacity(0.1))
-                    .cornerRadius(12)
                 }
                 .padding()
 
                 Spacer()
 
                 Button(action: saveTransaction) {
-                    Text("Save ZenithTransaction")
+                    Text("Save Transaction")
                         .font(.headline)
                         .foregroundColor(.black)
                         .frame(maxWidth: .infinity)
@@ -346,12 +457,20 @@ struct AddTransactionView: View {
     private func saveTransaction() {
         guard let amount = Double(amountString), !merchant.isEmpty else { return }
 
+        // Use selectedUserCategoryID if available, otherwise use the enum
+        let finalCategory: TransactionCategory
+        if let customID = selectedUserCategoryID, useCustomCategory {
+            finalCategory = TransactionCategory(rawValue: customID) ?? .other
+        } else {
+            finalCategory = category
+        }
+
         let newTransaction = ZenithTransaction(
             merchant: merchant,
             date: Date(),
             amount: type == .income ? abs(amount) : -abs(amount),
             type: type,
-            category: category
+            category: finalCategory
         )
 
         modelContext.insert(newTransaction)
@@ -380,7 +499,7 @@ struct EditTransactionView: View {
 
     var body: some View {
         ZStack {
-            Color.zenithBlack.ignoresSafeArea()
+            ZenithBackground()
 
             VStack(spacing: 24) {
                 Text("Edit ZenithTransaction")
@@ -392,15 +511,27 @@ struct EditTransactionView: View {
                 VStack(spacing: 16) {
                     TextField("Merchant", text: $merchant)
                         .padding()
-                        .background(Color.white.opacity(0.1))
-                        .cornerRadius(12)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(.ultraThinMaterial)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                                )
+                        )
                         .foregroundColor(.white)
 
                     TextField("Amount", text: $amountString)
                         .keyboardType(.decimalPad)
                         .padding()
-                        .background(Color.white.opacity(0.1))
-                        .cornerRadius(12)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(.ultraThinMaterial)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                                )
+                        )
                         .foregroundColor(.white)
 
                     Picker("Type", selection: $type) {
@@ -422,7 +553,14 @@ struct EditTransactionView: View {
                         .tint(.mintGreen)
                     }
                     .padding()
-                    .background(Color.white.opacity(0.1))
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(.ultraThinMaterial)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                            )
+                    )
                     .cornerRadius(12)
                 }
                 .padding()
@@ -503,7 +641,7 @@ struct TransactionDetailView: View {
 
     var body: some View {
         ZStack {
-            Color.zenithBlack.ignoresSafeArea()
+            ZenithBackground()
 
             VStack(spacing: 24) {
                 // Handle
@@ -558,7 +696,12 @@ struct TransactionDetailView: View {
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 20)
-                        .fill(Color.white.opacity(0.05))
+                        .fill(.ultraThinMaterial)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                        )
+                        .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
                 )
                 .padding(.horizontal)
 

@@ -50,8 +50,8 @@ struct ZenithTabBar: View {
         .padding(.vertical, 16)
         .padding(.horizontal, 20)
         .background(
-            Color.zenithBlack.opacity(0.8)
-                .background(.ultraThinMaterial)
+            RoundedRectangle(cornerRadius: 30)
+                .fill(.ultraThinMaterial)
         )
         .cornerRadius(30)
         .overlay(

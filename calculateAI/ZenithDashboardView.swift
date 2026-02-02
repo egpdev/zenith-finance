@@ -14,57 +14,46 @@ struct ZenithDashboardView: View {
 
     var body: some View {
         ZStack {
-            // Ambient Background
-            Color.zenithBlack.ignoresSafeArea()
-
-            // Subtle animated gradient orb
-            GeometryReader { proxy in
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [
-                                Color.neonTurquoise.opacity(0.15),
-                                Color.purple.opacity(0.05),
-                                Color.clear,
-                            ],
-                            center: .center,
-                            startRadius: 0,
-                            endRadius: 400
-                        )
-                    )
-                    .frame(width: 600, height: 600)
-                    .offset(x: -150, y: -200)
-                    .blur(radius: 50)
-            }
-            .ignoresSafeArea()
+            // New Aurora Background
+            ZenithBackground()
 
             VStack(spacing: 0) {
                 // Header
                 HStack {
                     Image(systemName: "sparkles")
                         .font(.title2)
-                        .foregroundColor(.neonTurquoise)
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [Color.neonTurquoise, Color.mintGreen],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
 
                     Text("Zenith")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .tracking(2)
+                        .font(.system(size: 28, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
 
                     Spacer()
 
-                    Button(action: {
-                        HapticManager.shared.light()
-                        showingNotifications = true
-                    }) {
-                        Image(systemName: "bell.badge.fill")
-                            .symbolRenderingMode(.palette)
-                            .foregroundStyle(Color.red, Color.white)
-                            .padding(10)
-                            .background(Circle().fill(Color.white.opacity(0.1)))
+                    Button(action: { showingNotifications = true }) {
+                        ZStack {
+                            Circle()
+                                .fill(.ultraThinMaterial)
+                                .frame(width: 44, height: 44)
+                                .overlay(
+                                    Circle()
+                                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                                )
+
+                            Image(systemName: "bell.badge.fill")
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(Color.red, Color.white)
+                                .font(.system(size: 16))
+                        }
                     }
                 }
-                .padding(.horizontal)
+                .padding(.horizontal, 24)
                 .padding(.top, 20)
                 .padding(.bottom, 10)
 
@@ -726,34 +715,32 @@ struct QuickActionButton: View {
     let action: () -> Void
 
     var body: some View {
-        Button(action: action) {
-            VStack(spacing: 12) {
+        VStack(spacing: 8) {
+            Button(action: action) {
                 ZStack {
                     Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [color.opacity(0.2), color.opacity(0.1)],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .frame(width: 60, height: 60)
+                        .fill(.ultraThinMaterial)
+                        .frame(width: 64, height: 64)
                         .overlay(
                             Circle()
-                                .stroke(color.opacity(0.3), lineWidth: 1)
+                                .stroke(
+                                    LinearGradient(
+                                        colors: [color.opacity(0.5), color.opacity(0.1)],
+                                        startPoint: .topLeading, endPoint: .bottomTrailing),
+                                    lineWidth: 1
+                                )
                         )
+                        .shadow(color: color.opacity(0.2), radius: 10, x: 0, y: 5)
 
                     Image(systemName: icon)
-                        .font(.system(size: 24, weight: .semibold))
+                        .font(.title2)
                         .foregroundColor(color)
-                        .shadow(color: color.opacity(0.5), radius: 5)
                 }
-
-                Text(label)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundColor(.white.opacity(0.8))
             }
+
+            Text(label)
+                .font(.caption)
+                .foregroundColor(.gray)
         }
     }
 }
@@ -804,11 +791,10 @@ struct DashboardTransactionRow: View {
     }
 }
 
-// MARK: - Balance Card (Kept mostly same, just slight styling tweaks if needed)
+// MARK: - Balance Card (Revamped)
 struct BalanceCard: View {
     let transactions: [ZenithTransaction]
     @State private var selectedIndex: Int? = nil
-    @State private var dragOffset: CGFloat = 0
 
     var currentBalance: Double {
         transactions.reduce(0) { $0 + ($1.type == .income ? $1.amount : -$1.amount) }
@@ -832,129 +818,128 @@ struct BalanceCard: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Total Balance")
-                .font(.subheadline)
-                .foregroundColor(.gray)
-                .textCase(.uppercase)
+        ZStack {
+            // Glassmorphism background
+            RoundedRectangle(cornerRadius: 32)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 32)
+                        .stroke(
+                            LinearGradient(
+                                colors: [.white.opacity(0.2), .clear],
+                                startPoint: .topLeading, endPoint: .bottomTrailing),
+                            lineWidth: 1
+                        )
+                )
+                .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
 
-            Text("$\(displayBalance, specifier: "%.2f")")
-                .font(.system(size: 44, weight: .bold, design: .rounded))
-                .foregroundColor(.white)
-                .contentTransition(.numericText())
-                .shadow(color: .neonTurquoise.opacity(0.2), radius: 10)
+            VStack(alignment: .leading, spacing: 5) {
+                Text("TOTAL BALANCE")
+                    .font(.caption)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white.opacity(0.7))
+                    .padding(.top, 24)
+                    .padding(.horizontal, 24)
 
-            // Chart area
-            Chart {
-                ForEach(Array(chartPoints.enumerated()), id: \.offset) { index, value in
-                    LineMark(
-                        x: .value("Idx", index),
-                        y: .value("Val", value)
-                    )
-                    .interpolationMethod(.catmullRom)
-                    .foregroundStyle(Color.neonTurquoise)
-                    .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
-
-                    AreaMark(
-                        x: .value("Idx", index),
-                        y: .value("Val", value)
-                    )
-                    .interpolationMethod(.catmullRom)
+                Text("$\(displayBalance, specifier: "%.2f")")
+                    .font(.system(size: 48, weight: .bold, design: .rounded))
                     .foregroundStyle(
                         LinearGradient(
-                            colors: [.neonTurquoise.opacity(0.4), .neonTurquoise.opacity(0.0)],
+                            colors: [.white, Color.neonTurquoise],
                             startPoint: .top,
                             endPoint: .bottom
                         )
                     )
-                }
+                    .contentTransition(.numericText())
+                    .padding(.horizontal, 24)
 
-                if let selectedIndex, selectedIndex < chartPoints.count {
-                    RuleMark(x: .value("Idx", selectedIndex))
-                        .foregroundStyle(Color.white.opacity(0.5))
-                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
+                // Chart area
+                Chart {
+                    ForEach(Array(chartPoints.enumerated()), id: \.offset) { index, value in
+                        AreaMark(
+                            x: .value("Idx", index),
+                            y: .value("Val", value)
+                        )
+                        .interpolationMethod(.catmullRom)
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [Color.neonTurquoise.opacity(0.3), .clear],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+
+                        LineMark(
+                            x: .value("Idx", index),
+                            y: .value("Val", value)
+                        )
+                        .interpolationMethod(.catmullRom)
+                        .foregroundStyle(Color.neonTurquoise)
+                        .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
+                    }
+
+                    if let selectedIndex, selectedIndex < chartPoints.count {
+                        RuleMark(x: .value("Idx", selectedIndex))
+                            .foregroundStyle(Color.white.opacity(0.5))
+                            .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
+                    }
                 }
-            }
-            .frame(height: 180)
-            .chartYAxis(.hidden)
-            .chartXAxis(.hidden)
-            .chartOverlay { proxy in
-                GeometryReader { geometry in
-                    Rectangle().fill(.clear).contentShape(Rectangle())
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    let x = value.location.x
-                                    if let idx: Int = proxy.value(atX: x) {
-                                        if selectedIndex != idx {
-                                            selectedIndex = idx
-                                            HapticManager.shared.light()  // Haptic feedback on step change
+                .frame(height: 120)
+                .padding(.bottom, 20)
+                .chartYAxis(.hidden)
+                .chartXAxis(.hidden)
+                .chartOverlay { proxy in
+                    GeometryReader { geometry in
+                        Rectangle().fill(.clear).contentShape(Rectangle())
+                            .gesture(
+                                DragGesture()
+                                    .onChanged { value in
+                                        let x = value.location.x
+                                        if let idx: Int = proxy.value(atX: x) {
+                                            if selectedIndex != idx {
+                                                selectedIndex = idx
+                                                HapticManager.shared.light()
+                                            }
                                         }
                                     }
-                                }
-                                .onEnded { _ in
-                                    withAnimation {
-                                        selectedIndex = nil
+                                    .onEnded { _ in
+                                        withAnimation {
+                                            selectedIndex = nil
+                                        }
                                     }
-                                }
-                        )
+                            )
+                    }
                 }
             }
         }
-        .padding(24)
-        .background(
-            RoundedRectangle(cornerRadius: 28)
-                .fill(
-                    LinearGradient(
-                        colors: [Color.zenithCharcoal, Color.black],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 28)
-                        .stroke(
-                            LinearGradient(
-                                colors: [.white.opacity(0.15), .clear],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            ),
-                            lineWidth: 1
-                        )
-                )
-                .shadow(color: .black.opacity(0.5), radius: 20, x: 0, y: 10)
-        )
+        .padding(.horizontal)
     }
 }
 
-// MARK: - Smart Budget Card (Updated)
+// MARK: - Smart Budget Card (Revamped)
 struct SmartBudgetCard: View {
     var transactions: [ZenithTransaction]
-    @State private var aiInsight: String = "Analyzing your spending patterns..."
+    @State private var aiInsight: String = "Analyzing your spending..."
     @State private var isAnalyzing: Bool = true
 
     var body: some View {
         HStack(spacing: 16) {
-            // Icon Ring
+            // Animated Icon
             ZStack {
-                Circle()
-                    .stroke(
-                        AngularGradient(
-                            gradient: Gradient(colors: [.neonTurquoise, .mintGreen, .neonTurquoise]
-                            ),
-                            center: .center
-                        ),
-                        lineWidth: 3
-                    )
-                    .frame(width: 50, height: 50)
-                    .shadow(color: .neonTurquoise.opacity(0.5), radius: 5)
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.black.opacity(0.3))
+                    .frame(width: 56, height: 56)
 
-                Image(systemName: "sparkles")
-                    .foregroundColor(.white)
-                    .font(.system(size: 20))
+                Image(systemName: "brain.head.profile")
+                    .font(.system(size: 24))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Color.neonTurquoise, Color.mintGreen],
+                            startPoint: .topLeading, endPoint: .bottomTrailing)
+                    )
             }
 
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text("AI Financial Insight")
                     .font(.headline)
                     .foregroundColor(.white)
@@ -962,45 +947,35 @@ struct SmartBudgetCard: View {
                 Text(aiInsight)
                     .font(.caption)
                     .foregroundColor(.gray)
-                    .lineLimit(3)
-                    .multilineTextAlignment(.leading)
+                    .lineLimit(2)
             }
 
             Spacer()
-
-            Image(systemName: "chevron.right")
-                .foregroundColor(.gray.opacity(0.5))
-                .font(.caption)
         }
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.zenithCharcoal.opacity(0.6))
+            RoundedRectangle(cornerRadius: 24)
+                .fill(.ultraThinMaterial)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.white.opacity(0.05), lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 24)
+                        .stroke(Color.neonTurquoise.opacity(0.3), lineWidth: 1)
                 )
+                .shadow(color: .neonTurquoise.opacity(0.1), radius: 10)
         )
+        .padding(.horizontal)
         .onAppear {
-            // Updated mock logic to avoid "Failed" message immediately
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                // Determine insight based on local data if API fails or just as generic fallback
                 if transactions.isEmpty {
-                    self.aiInsight =
-                        "Start adding transactions to unlock personalized saving tips and predictions."
+                    self.aiInsight = "Add transactions to unlock AI predictions."
                 } else {
-                    // Try Groq or fallback
                     GroqService.shared.fetchFinancialInsight(transactions: transactions) { result in
                         if result.contains("failed") || result.contains("error") {
                             self.aiInsight =
-                                "Spending on 'Food' is 15% higher this week. Consider cooking at home to save ~$50."
+                                "Spending on 'Food' is higher this week. Avoid delivery to save $50."
                         } else {
                             self.aiInsight = result
                         }
                     }
-                }
-                withAnimation {
-                    self.isAnalyzing = false
                 }
             }
         }

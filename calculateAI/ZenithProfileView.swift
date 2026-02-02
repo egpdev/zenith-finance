@@ -25,7 +25,7 @@ struct ZenithProfileView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.zenithBlack.ignoresSafeArea()
+                ZenithBackground()
 
                 VStack(spacing: 0) {
                     // MARK: - Header
@@ -258,13 +258,22 @@ struct ZenithScoreCard: View {
             }
         }
         .padding(24)
+        .padding(24)
         .background(
             RoundedRectangle(cornerRadius: 24)
-                .fill(Color.zenithCharcoal.opacity(0.6))
+                .fill(.ultraThinMaterial)
                 .overlay(
                     RoundedRectangle(cornerRadius: 24)
-                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                        .stroke(
+                            LinearGradient(
+                                colors: [.white.opacity(0.2), .clear],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 1
+                        )
                 )
+                .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
         )
     }
 }
@@ -295,9 +304,14 @@ struct MenuRow: View {
                 .foregroundColor(.gray)
         }
         .padding()
+        .padding()
         .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white.opacity(0.05))
+            RoundedRectangle(cornerRadius: 20)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.white.opacity(0.05), lineWidth: 1)
+                )
         )
         .contentShape(Rectangle())  // Ensures the whole area is tappable
     }
@@ -316,7 +330,7 @@ struct ZenithBaseDetailView<Content: View>: View {
 
     var body: some View {
         ZStack {
-            Color.zenithBlack.ignoresSafeArea()
+            ZenithBackground()
 
             VStack(spacing: 0) {
                 ScrollView {
