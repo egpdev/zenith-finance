@@ -36,7 +36,7 @@ Das Projekt basiert auf modernsten Apple-Technologien und folgt der MVVM-Archite
 
 1.  **Repository klonen**:
     ```bash
-    git clone https://github.com/IhrUsername/zenith-finance.git
+    git clone https://github.com/egpdev/zenith-finance.git
     cd zenith-finance
     ```
 
