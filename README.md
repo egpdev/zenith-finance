@@ -67,3 +67,4 @@ Das Projekt basiert auf modernsten Apple-Technologien und folgt der MVVM-Archite
 
 ---
 *Entwickelt mit ❤️ von Pylkov Egor*
+Portfolio Project
